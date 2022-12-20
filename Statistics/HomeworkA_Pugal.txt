@@ -1,0 +1,78 @@
+#=================================================================================================
+# Friedmann test
+# Let k experts test on object in m aspects
+#{   H0: All experts estimate similarly
+#{   H1: At least 1 expert estimates differently
+
+# Install and load the PMCMR package
+install.packages("PMCMR")
+library(PMCMR)
+
+# Create a matrix containing the ratings from the experts
+ratings <- matrix(c(8,  9,  7, 8, 
+                    6,  5,  9, 7, 
+                    10, 7,  7, 8, 
+                    9,  6,  8, 6, 
+                    9, 10, 10, 7, 
+                    9,  8,  6, 8),
+                    nrow = 6, ncol = 4, byrow = TRUE)
+
+# Perform the Friedman test
+#-----------------------------------------------------
+# Explanation for the 'friedman.test()' function:
+# ----
+# The function takes as input a matrix or data frame 
+# containing the ratings from the experts, with each 
+# row representing a property and each column 
+# representing an expert's ratings.
+#-----------------------------------------------------
+friedman.test(ratings)
+
+#         Friedman rank sum test
+# 
+# data:  ratings
+# Friedman chi-squared = 1.8, df = 3, p-value = 0.6149  # We cannot reject H0, bc p-value > 0.05. 
+                                                        # All experts assesed the builing equally.
+
+#=================================================================================================
+# Likelihood ratio (LR) criterion ## In three of the examples ## 
+#------------------------------------------------------------
+# The likelihood ratio is a measure of the evidence in favor 
+# of one hypothesis over another in statistical hypothesis 
+# testing. In this case, the code is defining two hypotheses: 
+# one where the probability of success is less than or equal 
+# to 0.5, and one where the probability of success is greater 
+# than 0.5.
+#------------------------------------------------------------
+
+x=c(4, 6, 3, 2, 7, 1, 8)
+n = 10
+alpha = 1.5
+beta  = 1.5    #prior is beta distribution
+    tihedus=function (m){   ## tihedus ~ likelihood, m - probability
+        if (m>0){
+            d=dbeta(m,alpha, beta)*prod(dbinom(x,n,m))
+        } else {
+        d=0
+        }
+    return(d)
+}
+int1=integrate(Vectorize(tihedus), 0, 0.5)
+int2=integrate(Vectorize(tihedus), 0.5, 1)
+LR=int1$value/int2$value
+LR  
+#   [1] 4.782835    # Answer: we have to stay on H0
+                    # Beacuse LR < 5
+
+
+#=================================================================================================
+
+# Install and load the BayesFactor package
+install.packages("BayesFactor")
+library(BayesFactor)
+
+# Define the sample
+x <- c(4, 6, 3, 2, 7, 1, 8)
+
+# Calculate the Bayes factor
+bf(success = x, trials = 10, alpha = 1.5, beta = 1.5)
