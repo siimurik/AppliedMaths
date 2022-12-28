@@ -35,7 +35,7 @@ for k=2:l
     for i=2:n
         u(i,k+1)=1/(2-tau)*(4*u(i,k)*(1-C) - u(i,k-1)*(2-tau) + ...
             C*u(i+1,k)*(2-h) + C*u(i-1,k)*(2+h) + x(i) + t(k));    
-        %    This has truncation error is O(h^2 + τ^2) but doesn't work :(
+        %    This has a truncation error of O(h^2 + τ^2) 
         %------------------------------------------------------------------
         % u(i,k+1)= 1/(1+tau)*( u(i,k)*(2-tau)-u(i,k-1)+ tau^2/h^2*(u(i+1,k) ...
         % -2*u(i,k) + u(i-1,k)) - tau^2/h*(u(i+1,k) - u(i,k)) + x(i) + t(k));
