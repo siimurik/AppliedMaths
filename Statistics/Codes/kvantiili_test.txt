@@ -1,0 +1,15 @@
+x=c(2,1,7,4,8,9)
+y=0
+Pvalue=0
+for (j in 1:300){
+for (i in 1:1000) y[i]=sample(x,1)
+S=length(sample(y[y<=8]))
+Z=(S-0.8*1000)/sqrt(0.8*0.2*1000)
+Pvalue[j]=2*(1-pnorm(abs(Z)))}
+Pvalue
+round(quantile(Pvalue,0.025),4)
+round(quantile(Pvalue,0.975),4)
+   
+
+
+

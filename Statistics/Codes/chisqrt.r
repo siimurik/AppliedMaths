@@ -1,0 +1,26 @@
+x1 = c(0,300,53)
+x2 = c(300,600,41)
+x3 = c(600,900,30)
+x4 = c(900,1200,22)
+x5 = c(12,1500,16)
+x6 = c(1500,1800,12)
+x7 = c(1800,2100,9)
+x8 = c(2100,2400,7)
+x9 = c(2400,2700,5)
+x10 = c(2700,3000,3)
+x11 = c(3000,3300,2)
+x12 = c(3300,3600,0)
+x = cbind(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12)
+n = sum(x[3,])
+mean=0.5*sum((x[1,]+x[2,])*x[3,]/n) # estimated expectation of T 
+nu = 1/mean # MLE for parameter nu 
+m = length(x[3,])
+emp = 0
+theor = 0
+p = 0
+for (i in 1:m) emp[i] = x[3,i]
+for (i in 1:m) theor[i] = n*(pexp(x[2,i],nu) - pexp(x[1,i],nu))
+for (i in 1:m) p[i]=(emp[i]-theor[i])^2/theor[i]
+h=sum(p)
+pvalue=1-pchisq(h,10)
+pvalue  ## approx 0.96

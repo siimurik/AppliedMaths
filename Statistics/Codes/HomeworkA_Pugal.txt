@@ -1,0 +1,70 @@
+#=================================================================================================
+#    Statistics Homework version A
+#    Siim Erik Pugal
+#    January 2023
+#=================================================================================================
+# Friedmann test
+# uses the Experts.txt file
+# Let k experts test on object in m aspects
+#{   H0: All experts estimate similarly
+#{   H1: At least 1 expert estimates differently
+
+data = read.table('//home//siimep_x11//Documents//Magister//AppliedMaths//Statistics//Codes//Experts.txt', header = TRUE, sep=",")
+attach(data)
+data
+#   Hinne Omadus Ekspert
+#1      8      1       A
+#2      6      2       A
+#3     10      3       A
+#4      9      4       A
+
+#{   H0: All experts estimate similarly
+#{   H1: At least 1 expert estimates differently
+
+# Perform the Friedman test
+#-----------------------------------------------------
+# Explanation for the 'friedman.test()' function:
+# ----
+# The function takes as input a matrix or data frame 
+# containing the ratings from the experts, with each 
+# row representing a property and each column 
+# representing an expert's ratings.
+#-----------------------------------------------------
+friedman.test(Hinne~Omadus|Ekspert)
+
+#	Friedman rank sum test
+#
+#data:  Hinne and Omadus and Ekspert                    # We cannot reject H0, bc p-value > 0.05. 
+#Friedman chi-squared = 4.3077, df = 5, p-value = 0.506 # All experts assesed the builing equally.
+
+
+#=================================================================================================
+# Likelihood ratio (LR) criterion ## 
+#------------------------------------------------------------
+# The likelihood ratio is a measure of the evidence in favor 
+# of one hypothesis over another in statistical hypothesis 
+# testing. In this case, the code is defining two hypotheses: 
+# one where the probability of success is less than or equal 
+# to 0.5, and one where the probability of success is greater 
+# than 0.5.
+#------------------------------------------------------------
+
+x=c(4, 6, 3, 2, 7, 1, 8)
+n = 10
+alpha = 1.5
+beta  = 1.5    #prior is beta distribution
+    tihedus=function (m){   ## tihedus ~ likelihood, m - probability
+        if (m>0){
+            d=dbeta(m,alpha, beta)*prod(dbinom(x,n,m))
+        } else {
+        d=0
+        }
+    return(d)
+}
+int1=integrate(Vectorize(tihedus), 0, 0.5)
+int2=integrate(Vectorize(tihedus), 0.5, 1)
+LR=int1$value/int2$value
+LR  
+#   [1] 4.782835    # Answer: we have to stay on H0
+                    # Beacuse LR < 5
+#=================================================================================================
